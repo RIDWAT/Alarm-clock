@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            margin: 100px auto;
+            width:500px ;
+            height: 400px;
+            border: thin solid black;
+            background-image: linear-gradient(200deg,pink,skyblue);
+        }
+        input{
+            margin: 10px 0 0 0;
+            width: 40px;
+            font-size: 20px;
+            border: thick solid pink;
+        }
+        input:nth-of-type(1){
+            margin-left: 150px;
+        }
+        #button{
+            margin: 15px 180px;
+            padding: 10px;
+            border: 0;
+            border-radius: 10px;
+            background-color: pink;
+        }
+        .time{
+           border: thin solid black;
+           background-color: white; 
+           width: 100px;
+           margin: 80px 0 0 150px;
+           text-align: center;
+           padding: 30px;
+           border-radius: 20px;
+           
+        }
+        #modalbox{
+         position: absolute;
+            margin:-450px 550px;
+            background-color:white;
+            border: thick solid skyblue;
+            box-shadow: 2px 2px 2px 1px;
+            display: none;
+            padding: 20px 30px;
+            border-radius: 20px;
+        }
+        #okaybtn{
+            padding: 20px;
+            background-color: pink;
+            border: 0;
+            border-radius: 10px;
+
+        }
+    </style>
+</head>
+<body>
+    <audio src="./mixkit-alarm-digital-clock-beep-989.wav" id="audio"></audio>
+   <div class="container">
+    <div id="show"></div>
+    <input type="number" id="hourbox"  min="1"><span>:</span>
+    <input type="number" id="minutebox" min="1"><span>:</span>
+    <input type="number" id="secondsbox" min="0">
+    <button id="button" onclick="handlesetAlarm()">SET ALARM</button>
+   </div>
+   <div id="modalbox"></div>
+
+
+
+   <script>
+    let alarmHour , alarmMinute , alarmSec
+        
+     function displayTime() {
+        let date = new Date()
+        let hour = date.getHours()
+        let minute = date.getMinutes()
+         let seconds = date.getSeconds()
+        let rightMinute = minute<10? `0${minute}`: minute
+        let rightSeconds = seconds <10? `0${seconds}`: seconds
+       show.innerHTML = `<h3 class="time">${hour}:${rightMinute}:${rightSeconds}</h3>`
+
+
+
+       if (hour==alarmHour && minute== alarmMinute && seconds== alarmSec) {
+        showmodalbox('Time Up')
+        audio.play()
+       }
+    }
+    displayTime()
+    setInterval(() => {
+        displayTime()
+    }, 1000);
+      
+    
+    function handlesetAlarm(){
+        alarmHour = hourbox.value
+        alarmMinute = minutebox.value
+        alarmSec = secondsbox.value
+
+        let alarmSound = document.getElementById('audio')
+        displayTime()
+
+        let alarmClock = []
+        alarmClock.push(alarmHour,alarmMinute,alarmSec)
+        console.log(alarmClock)
+    }
+    function showmodalbox(messageText){
+        modalbox.style.display = "block"
+        modalbox.innerHTML = `
+           <p>${messageText}</p>
+           <button id="okaybtn" onclick="handleokaybtn()">Okay</button>
+           
+        `
+    }
+    function handleokaybtn(){
+        modalbox.style.display = "None"
+            audio.pause()
+    
+       
+    }
+
+   </script>
+</body>
+</html>
